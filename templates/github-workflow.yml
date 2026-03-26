@@ -1,0 +1,35 @@
+# GitHub Actions template for AI PR Reviewer
+# Copy this file to your repo's .github/workflows/ai-review.yml
+#
+# Required Secrets (Settings > Secrets > Actions):
+#   ANTHROPIC_API_KEY  - Anthropic API key
+#
+# GITHUB_TOKEN is provided automatically by GitHub Actions.
+
+name: AI PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    # Skip draft PRs
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: AI Code Review
+        uses: gauravs08/ai-pr-reviewer@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # model: claude-sonnet-4-5-20250929
+          # tracks: 'code-quality,security'
+          # max_comments: '15'
+          # severity_threshold: 'medium'
+          # exclude_patterns: '*.lock,dist/**'
+          # custom_instructions: ''
+          # post_summary: 'true'

@@ -1,0 +1,10 @@
+node_modules/
+.env
+*.log
+temp_repos/
+.idea/
+.vscode/
+*.db
+qodana.yaml
+dist-cli/
+.claude/

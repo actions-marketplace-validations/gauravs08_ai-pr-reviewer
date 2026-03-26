@@ -1,0 +1,51 @@
+{
+  "name": "ai-pr-reviewer",
+  "version": "1.0.0",
+  "description": "AI-powered PR code review using Claude — works with GitHub, GitLab, and Bitbucket",
+  "main": "dist/index.js",
+  "bin": {
+    "ai-pr-review": "dist-cli/index.js"
+  },
+  "scripts": {
+    "build": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
+    "build:cli": "ncc build src/cli.ts -o dist-cli --source-map",
+    "build:all": "npm run build && npm run build:cli",
+    "dry-run": "ts-node src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build:all"
+  },
+  "keywords": [
+    "github-action",
+    "gitlab-ci",
+    "bitbucket-pipelines",
+    "code-review",
+    "ai",
+    "claude",
+    "pr-review",
+    "security-review",
+    "owasp"
+  ],
+  "author": "gauravs08",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gauravs08/ai-pr-reviewer.git"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@types/minimatch": "^5.1.2",
+    "minimatch": "^10.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@vercel/ncc": "^0.38.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

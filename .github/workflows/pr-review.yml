@@ -1,0 +1,28 @@
+name: AI PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    # Skip draft PRs
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: AI PR Review
+        uses: ./
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          model: 'claude-sonnet-4-5-20250929'
+          tracks: 'code-quality,security'
+          max_comments: '15'
+          severity_threshold: 'medium'
+          post_summary: 'true'

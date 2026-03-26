@@ -1,0 +1,52 @@
+name: 'AI PR Reviewer'
+description: 'AI-powered code review for pull requests using Claude'
+author: 'gauravs08'
+
+branding:
+  icon: 'eye'
+  color: 'purple'
+
+inputs:
+  anthropic_api_key:
+    description: 'Anthropic API key for Claude'
+    required: true
+  github_token:
+    description: 'GitHub token for posting reviews (defaults to GITHUB_TOKEN)'
+    required: false
+    default: ${{ github.token }}
+  model:
+    description: 'Claude model to use'
+    required: false
+    default: 'claude-sonnet-4-5-20250929'
+  tracks:
+    description: 'Comma-separated review tracks: code-quality,security,cross-file'
+    required: false
+    default: 'code-quality,security'
+  max_files:
+    description: 'Maximum number of files to review'
+    required: false
+    default: '20'
+  max_comments:
+    description: 'Maximum inline comments per review'
+    required: false
+    default: '15'
+  exclude_patterns:
+    description: 'Comma-separated glob patterns to skip (e.g., *.lock,dist/**)'
+    required: false
+    default: '*.lock,*.min.js,*.min.css,dist/**,build/**,*.generated.*,package-lock.json,pnpm-lock.yaml,yarn.lock'
+  severity_threshold:
+    description: 'Minimum severity to post: medium, high, or critical'
+    required: false
+    default: 'medium'
+  custom_instructions:
+    description: 'Additional review instructions appended to prompts'
+    required: false
+    default: ''
+  post_summary:
+    description: 'Post a summary comment on the PR'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

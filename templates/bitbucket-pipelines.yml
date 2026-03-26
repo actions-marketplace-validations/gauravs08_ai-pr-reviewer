@@ -1,0 +1,27 @@
+# Bitbucket Pipelines template for AI PR Reviewer
+# Copy the pull-requests section into your repo's bitbucket-pipelines.yml
+#
+# Required Repository Variables (Settings > Pipelines > Repository Variables):
+#   ANTHROPIC_API_KEY  - Anthropic API key
+#   BITBUCKET_TOKEN    - Bitbucket access token with PR read/write scope
+
+pipelines:
+  pull-requests:
+    '**':
+      - step:
+          name: AI Code Review
+          image: node:20-alpine
+          script:
+            - apk add --no-cache git
+            - git clone https://github.com/gauravs08/ai-pr-reviewer.git /tmp/ai-pr-reviewer
+            - cd /tmp/ai-pr-reviewer && npm install --production
+            - cd $BITBUCKET_CLONE_DIR
+            - |
+              export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY
+              export BITBUCKET_TOKEN=$BITBUCKET_TOKEN
+              node /tmp/ai-pr-reviewer/dist-cli/index.js \
+                --platform bitbucket-cloud \
+                --base $BITBUCKET_PR_DESTINATION_BRANCH
+          # Don't fail the pipeline if review fails
+          after-script:
+            - echo "AI review completed"
